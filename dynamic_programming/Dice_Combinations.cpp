@@ -6,21 +6,23 @@
 using namespace std;
 int mod = 1e9 + 7;
 
-int solve(int sum){
+int solve(int sum, vector<int> &dp){
     if(sum == 0) return 1;
+    if(dp[sum] != -1) return dp[sum];
     int ans = 0;
     for(int i=1; i<=6; i++){
         if(sum-i>=0){
-            ans = (ans + solve(sum - i))%mod;
+            ans = (ans + solve(sum - i, dp))%mod;
         }
     }
-    return ans%mod;
+    return dp[sum]= ans%mod;
 }
 
 int main(){
     int n;
     cin>>n;
-    int ans = solve(n);
+    vector<int> dp(n+1, -1);
+    int ans = solve(n, dp);
     cout<<ans<<endl;
 
 }
