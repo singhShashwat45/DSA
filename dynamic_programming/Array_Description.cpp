@@ -14,6 +14,9 @@ int solve(int i, int prev, int n, int upper, vector<int>&v, vector<vector<int>> 
         if(abs(v[i] - prev) <= 1){
             return solve(i+1, v[i], n, upper, v, dp);
         }
+        else {
+            return dp[i][prev] = 0;
+        }
     }
     for(int j = max(prev-1, 1); j<= min(upper, prev+1); j++){
         total = (total + solve(i+1, j, n, upper, v, dp))%mod;
@@ -30,8 +33,15 @@ int main() {
     for(int i=0; i<n; i++){
         cin>>v[i];
     }
-    vector<vector<int>> dp(n, vector<int>(maxi, -1));
-    int ans = solve(1, v[0], n, maxi, v, dp);
-    cout<<ans;
+    vector<vector<int>> dp(n, vector<int>(maxi+1, -1));
+    int ans = 0;
+    if (v[0] != 0) {
+        ans = solve(1, v[0], n, maxi, v, dp);
+    } else {
+        for (int val = 1; val <= maxi; val++) {
+            ans = (ans + solve(1, val, n, maxi, v, dp)) % mod;
+        }
+    }
+    cout << ans << "\n";
     
 }
