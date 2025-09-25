@@ -29,15 +29,12 @@ string dfs(int i, int j) {
 }
 
 int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-
     cin >> n;
     grid.resize(n);
     for (int i = 0; i < n; i++) cin >> grid[i];
 
     memo.assign(n, vector<string>(n, ""));
-    cout << dfs(0, 0) << "\n";
+    cout << dfs(0, 0);
 
     return 0;
 }
