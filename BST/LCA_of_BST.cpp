@@ -16,34 +16,18 @@ struct TreeNode {
 };
 
 
+
 class Solution {
 public:
     TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
-        if(root == NULL) return NULL;
-        unordered_map<TreeNode*, TreeNode*> parent;
-        queue<TreeNode*>qu;
-        qu.push(root);
-        while(!qu.empty()){
-            TreeNode* node = qu.front();
-            qu.pop();
-            if(node->left){
-                parent[node->left] = node;
-                qu.push(node->left);
-            }
-            if(node->right){
-                parent[node->right] = node;
-                qu.push(node->right);
-            }
-        }
-        unordered_set<TreeNode*> ancestors;
-        while (p) {
-            ancestors.insert(p);
-            p = parent[p];
-        }
-        while (q) {
-            if (ancestors.count(q)) return q;
-            q = parent[q];
-        }
-        return NULL;
+        if (!root) return nullptr;
+
+        if (p->val < root->val && q->val < root->val)
+            return lowestCommonAncestor(root->left, p, q);
+
+        if (p->val > root->val && q->val > root->val)
+            return lowestCommonAncestor(root->right, p, q);
+
+        return root;   // when p and q split
     }
 };
