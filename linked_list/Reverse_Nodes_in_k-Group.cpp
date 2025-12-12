@@ -10,52 +10,35 @@ struct ListNode {
  class Solution {
 public:
 
-    ListNode* reverseList(ListNode* head) {
-        ListNode* cur = head;
+    ListNode* reverseLinkedList(ListNode* head, int k) {
         ListNode* prev = nullptr;
-        while(cur){
-            ListNode* nextNode = cur->next;
-            cur->next = prev;
-            prev = cur;
-            cur = nextNode;
+        ListNode* curr = head;
+    
+        while (k--) {
+            ListNode* nextNode = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = nextNode;
         }
-        return prev;
-
-    }
-
-    ListNode* getKthNode(ListNode* head, int k){
-        k-=1;
-        while(head!= nullptr && k>0){
-            head = head-> next;
-            k--;
-        }
-        return head;
+        return prev;  // new head after reversing k nodes
     }
 
     ListNode* reverseKGroup(ListNode* head, int k) {
+        // Step 1: check if list has at least k nodes
         ListNode* temp = head;
-        ListNode* prevLast = nullptr;
-        while(temp){
-            ListNode* kthNode = getKthNode(temp, k);
-            if(kthNode == nullptr){
-                if(prevLast) prevLast -> next =  temp;
-                break;
-            }
-
-            ListNode* nextNode = kthNode -> next;
-            kthNode->next = nullptr;
-            
-            ListNode* newHead = reverseList(temp); // capture reversed head
-            if (temp == head) {
-                head = newHead; // update global head
-            } else {
-                prevLast->next = newHead; // connect last group to current reversed
-            }
-            temp->next = nextNode; // connect end of reversed group to rest
-            prevLast = temp;   
-            temp = nextNode;
-
+        for (int i = 0; i < k; i++) {
+            if (!temp) return head;   // fewer than k nodes → no change
+            temp = temp->next;
         }
-        return head;
+    
+        // Step 2: reverse first k nodes
+        ListNode* newHead = reverseLinkedList(head, k);
+    
+        // Step 3: recursively process the remaining part
+        head->next = reverseKGroup(temp, k);
+    
+        return newHead;
     }
+
+
 };
